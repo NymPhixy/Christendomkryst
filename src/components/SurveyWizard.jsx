@@ -68,7 +68,7 @@ function toggleArrayValue(values, value) {
 function Likert({ value, onChange, label }) {
   return (
     <div>
-      <label className="mb-2 block text-sm text-amber-50/85">{label}</label>
+      <p className="mb-2 block text-sm text-amber-50/85">{label}</p>
       <div className="flex flex-wrap gap-2">
         {[1, 2, 3, 4, 5].map((score) => (
           <button
@@ -226,6 +226,8 @@ export function SurveyWizard({ onSubmitted }) {
                 <label className="field">
                   Leeftijd
                   <select
+                    id="ageRange"
+                    name="ageRange"
                     value={formData.ageRange}
                     onChange={(event) =>
                       updateField("ageRange", event.target.value)
@@ -243,6 +245,8 @@ export function SurveyWizard({ onSubmitted }) {
                 <label className="field">
                   Geslacht
                   <select
+                    id="gender"
+                    name="gender"
                     value={formData.gender}
                     onChange={(event) =>
                       updateField("gender", event.target.value)
@@ -259,6 +263,8 @@ export function SurveyWizard({ onSubmitted }) {
                 <label className="field">
                   Actief gelovig
                   <select
+                    id="activeBeliever"
+                    name="activeBeliever"
                     value={formData.activeBeliever}
                     onChange={(event) =>
                       updateField("activeBeliever", event.target.value)
@@ -274,6 +280,8 @@ export function SurveyWizard({ onSubmitted }) {
                 <label className="field">
                   Woonsituatie
                   <select
+                    id="household"
+                    name="household"
                     value={formData.household}
                     onChange={(event) =>
                       updateField("household", event.target.value)
@@ -301,6 +309,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Wat motiveert u het meest om kerstdecoratie te kopen?
                 <select
+                  id="buyMotivation"
+                  name="buyMotivation"
                   value={formData.buyMotivation}
                   onChange={(event) =>
                     updateField("buyMotivation", event.target.value)
@@ -324,6 +334,9 @@ export function SurveyWizard({ onSubmitted }) {
                     <label key={option} className="checkbox-pill">
                       <input
                         type="checkbox"
+                        id={`desiredAtmosphere-${option.replace(/\s+/g, "-").toLowerCase()}`}
+                        name="desiredAtmosphere"
+                        aria-label={option}
                         checked={formData.desiredAtmosphere.includes(option)}
                         onChange={() =>
                           updateField(
@@ -350,6 +363,9 @@ export function SurveyWizard({ onSubmitted }) {
                     <label key={option} className="checkbox-pill">
                       <input
                         type="checkbox"
+                        id={`appealElements-${option.replace(/\s+/g, "-").toLowerCase()}`}
+                        name="appealElements"
+                        aria-label={option}
                         checked={formData.appealElements.includes(option)}
                         onChange={() =>
                           updateField(
@@ -367,6 +383,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Plaatst u decoratie vooral binnen, buiten of beide?
                 <select
+                  id="placement"
+                  name="placement"
                   value={formData.placement}
                   onChange={(event) =>
                     updateField("placement", event.target.value)
@@ -398,6 +416,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Welke boodschap wilt u uitstralen met uw kerstdecoratie?
                 <textarea
+                  id="messageWanted"
+                  name="messageWanted"
                   value={formData.messageWanted}
                   onChange={(event) =>
                     updateField("messageWanted", event.target.value)
@@ -410,6 +430,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Welke belemmeringen ervaart u hierbij?
                 <textarea
+                  id="barriers"
+                  name="barriers"
                   value={formData.barriers}
                   onChange={(event) =>
                     updateField("barriers", event.target.value)
@@ -433,6 +455,9 @@ export function SurveyWizard({ onSubmitted }) {
                     <label key={option} className="checkbox-pill">
                       <input
                         type="checkbox"
+                        id={`productTypes-${option.replace(/\s+/g, "-").toLowerCase()}`}
+                        name="productTypes"
+                        aria-label={option}
                         checked={formData.productTypes.includes(option)}
                         onChange={() =>
                           updateField(
@@ -450,6 +475,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Welke stijl past het best?
                 <select
+                  id="stylePreference"
+                  name="stylePreference"
                   value={formData.stylePreference}
                   onChange={(event) =>
                     updateField("stylePreference", event.target.value)
@@ -489,6 +516,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Waarom kiest u dit concept?
                 <textarea
+                  id="conceptReason"
+                  name="conceptReason"
                   value={formData.conceptReason}
                   onChange={(event) =>
                     updateField("conceptReason", event.target.value)
@@ -514,6 +543,8 @@ export function SurveyWizard({ onSubmitted }) {
                 Geeft winst doneren aan christelijke organisaties een positiever
                 gevoel?
                 <select
+                  id="donationPositive"
+                  name="donationPositive"
                   value={formData.donationPositive}
                   onChange={(event) =>
                     updateField("donationPositive", event.target.value)
@@ -536,6 +567,8 @@ export function SurveyWizard({ onSubmitted }) {
                 Wat moet Kryst uitstralen om betrouwbaar en prettig aan te
                 voelen?
                 <textarea
+                  id="trustSignals"
+                  name="trustSignals"
                   value={formData.trustSignals}
                   onChange={(event) =>
                     updateField("trustSignals", event.target.value)
@@ -558,6 +591,8 @@ export function SurveyWizard({ onSubmitted }) {
               <label className="field">
                 Extra opmerkingen
                 <textarea
+                  id="extraRemarks"
+                  name="extraRemarks"
                   value={formData.extraRemarks}
                   onChange={(event) =>
                     updateField("extraRemarks", event.target.value)
