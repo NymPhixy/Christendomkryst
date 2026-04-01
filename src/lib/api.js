@@ -9,7 +9,9 @@ export async function submitSurvey(payload) {
 
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || "Opslaan is mislukt.");
+    const detail = data.detail ? ` (${data.detail})` : "";
+    const code = data.code ? ` [${data.code}]` : "";
+    throw new Error((data.error || "Opslaan is mislukt.") + detail + code);
   }
 
   return data;
@@ -20,7 +22,11 @@ export async function fetchResults() {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Resultaten ophalen is mislukt.");
+    const detail = data.detail ? ` (${data.detail})` : "";
+    const code = data.code ? ` [${data.code}]` : "";
+    throw new Error(
+      (data.error || "Resultaten ophalen is mislukt.") + detail + code,
+    );
   }
 
   return data;
