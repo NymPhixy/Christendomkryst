@@ -63,6 +63,38 @@ function aggregateResponses(rows) {
   };
 }
 
+async function readJsonSafe(response) {
+  const text = await response.text();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+async function submitSurveyToSupabase(payload) {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    throw new Error(
+      "API route niet beschikbaar en frontend Supabase configuratie ontbreekt.",
+    );
+  }
+
+  const { error } = await supabase.from("survey_responses").insert([
+    {
+      response: payload,
+    },
+  ]);
+
+  if (error) {
+    throw new Error(`Opslaan via Supabase is mislukt. (${error.message})`);
+  }
+
+  return { ok: true, fallback: "supabase" };
+}
+
 async function fetchResultsFromSupabase() {
   const supabase = getSupabaseClient();
   if (!supabase) {
@@ -91,14 +123,26 @@ export async function submitSurvey(payload) {
     body: JSON.stringify(payload),
   });
 
-  const data = await response.json();
+  const data = await readJsonSafe(response);
   if (!response.ok) {
-    const detail = data.detail ? ` (${data.detail})` : "";
-    const code = data.code ? ` [${data.code}]` : "";
-    throw new Error((data.error || "Opslaan is mislukt.") + detail + code);
+    const detail = data?.detail ? ` (${data.detail})` : "";
+    const code = data?.code ? ` [${data.code}]` : "";
+    const fullMessage = (data?.error || "Opslaan is mislukt.") + detail + code;
+
+    if (response.status === 404) {
+      try {
+        return await submitSurveyToSupabase(payload);
+      } catch {
+        throw new Error(
+          "API endpoint /api/submit-response niet gevonden. Start met `npm run dev:netlify` of configureer frontend Supabase variabelen.",
+        );
+      }
+    }
+
+    throw new Error(fullMessage);
   }
 
-  return data;
+  return data || { ok: true };
 }
 
 export async function fetchResults() {
