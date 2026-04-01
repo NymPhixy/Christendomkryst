@@ -34,6 +34,19 @@ Responsive one-page React campagnewebsite in warme kerststijl met:
 
    npx netlify dev
 
+## Frontend Supabase client (optioneel)
+
+Je kunt ook direct vanuit de frontend met Supabase lezen via `@supabase/supabase-js`.
+
+Benodigde variabelen in `.env`:
+
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-publishable-key
+
+Clientbestand staat in `src/utils/supabase.js`.
+
+Let op: gebruik alleen de publishable key in de frontend.
+
 ## Supabase tabel
 
 Voer deze SQL uit in Supabase:
@@ -69,3 +82,17 @@ Krijg je op productie 500 op /api/get-results of /api/submit-response? Check dan
 3. Je bekijkt de Function logs in Netlify:
    - Site -> Functions -> get-results / submit-response -> Logs
 4. De API geeft nu ook detail terug in de JSON (velden error + detail + code) om de exacte oorzaak te zien.
+
+## Supabase CLI setup
+
+supabase login
+supabase init
+supabase link --project-ref your-project-ref
+
+## Database connection string
+
+Een directe PostgreSQL-connection string is alleen voor backend tools of lokale admin scripts:
+
+postgresql://postgres:[YOUR-PASSWORD]@db.your-project-ref.supabase.co:5432/postgres
+
+Plaats deze nooit in frontend code of in publieke environment variables.
