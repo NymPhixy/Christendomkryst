@@ -1,4 +1,4 @@
-import { supabase } from "../utils/supabase.js";
+import { getSupabaseClient } from "../utils/supabase.js";
 
 const API_BASE = "/api";
 
@@ -64,6 +64,11 @@ function aggregateResponses(rows) {
 }
 
 async function fetchResultsFromSupabase() {
+  const supabase = getSupabaseClient();
+  if (!supabase) {
+    throw new Error("Frontend Supabase configuratie ontbreekt.");
+  }
+
   const { data, error } = await supabase
     .from("survey_responses")
     .select("response, created_at")
@@ -111,7 +116,11 @@ export async function fetchResults() {
       fullMessage.includes("SUPABASE_URL") ||
       fullMessage.includes("SUPABASE_SERVICE_ROLE_KEY")
     ) {
-      return fetchResultsFromSupabase();
+      try {
+        return await fetchResultsFromSupabase();
+      } catch {
+        throw new Error(fullMessage);
+      }
     }
 
     throw new Error(fullMessage);
