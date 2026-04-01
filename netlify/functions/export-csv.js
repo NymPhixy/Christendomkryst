@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "./_lib/supabase.js";
+import { getSupabaseClient, jsonResponse } from "./_lib/supabase.js";
 
 function csvEscape(value) {
   const stringValue = `${value ?? ""}`;
@@ -12,7 +12,11 @@ function csvEscape(value) {
   return stringValue;
 }
 
-export async function handler() {
+export async function handler(event) {
+  if (event?.httpMethod && event.httpMethod !== "GET") {
+    return jsonResponse(405, { error: "Method not allowed." });
+  }
+
   try {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase
@@ -22,10 +26,11 @@ export async function handler() {
       .limit(5000);
 
     if (error) {
-      return {
-        statusCode: 500,
-        body: "CSV export mislukt.",
-      };
+      return jsonResponse(500, {
+        error: "CSV export mislukt.",
+        detail: error.message,
+        code: error.code || null,
+      });
     }
 
     const rows = data || [];
@@ -79,10 +84,10 @@ export async function handler() {
       },
       body: lines.join("\n"),
     };
-  } catch {
-    return {
-      statusCode: 500,
-      body: "Onverwachte fout tijdens CSV export.",
-    };
+  } catch (caughtError) {
+    return jsonResponse(500, {
+      error: "Onverwachte fout tijdens CSV export.",
+      detail: caughtError?.message || "Geen extra details beschikbaar.",
+    });
   }
 }
