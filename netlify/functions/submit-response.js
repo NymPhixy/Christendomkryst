@@ -53,11 +53,18 @@ export async function handler(event) {
       .insert([{ response }]);
 
     if (error) {
-      return jsonResponse(500, { error: "Opslaan in database is mislukt." });
+      return jsonResponse(500, {
+        error: "Opslaan in database is mislukt.",
+        detail: error.message,
+        code: error.code || null,
+      });
     }
 
     return jsonResponse(200, { ok: true });
-  } catch {
-    return jsonResponse(500, { error: "Onverwachte fout tijdens verzenden." });
+  } catch (caughtError) {
+    return jsonResponse(500, {
+      error: "Onverwachte fout tijdens verzenden.",
+      detail: caughtError?.message || "Geen extra details beschikbaar.",
+    });
   }
 }

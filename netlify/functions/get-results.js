@@ -27,7 +27,11 @@ export async function handler() {
       .limit(5000);
 
     if (error) {
-      return jsonResponse(500, { error: "Resultaten ophalen is mislukt." });
+      return jsonResponse(500, {
+        error: "Resultaten ophalen is mislukt.",
+        detail: error.message,
+        code: error.code || null,
+      });
     }
 
     const rows = data || [];
@@ -72,9 +76,10 @@ export async function handler() {
       conceptBreakdown,
       openQuotes: openQuotes.slice(0, 10),
     });
-  } catch {
+  } catch (caughtError) {
     return jsonResponse(500, {
       error: "Onverwachte fout tijdens resultaten ophalen.",
+      detail: caughtError?.message || "Geen extra details beschikbaar.",
     });
   }
 }

@@ -57,3 +57,15 @@ response jsonb not null
 5. Publish directory: dist
 
 De redirects en functions map zijn al geconfigureerd in netlify.toml.
+
+## Troubleshooting 500 errors
+
+Krijg je op productie 500 op /api/get-results of /api/submit-response? Check dan:
+
+1. Netlify Environment variables staan in de Site settings en zijn opnieuw gedeployed:
+   - SUPABASE_URL
+   - SUPABASE_SERVICE_ROLE_KEY
+2. De Supabase tabel public.survey_responses bestaat echt (SQL hierboven uitvoeren).
+3. Je bekijkt de Function logs in Netlify:
+   - Site -> Functions -> get-results / submit-response -> Logs
+4. De API geeft nu ook detail terug in de JSON (velden error + detail + code) om de exacte oorzaak te zien.
